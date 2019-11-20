@@ -6,11 +6,7 @@ import tanvir_stemming
 import summarizer
 
 
-def testModel():
-    df = pd.read_csv("word_weights.csv")
-    distinctwords = df['word']
-    f = codecs.open("input.txt", "r", "utf8")
-    inputdata = f.read()
+def getresult(inputdata):
     rwdata = inputdata
     rwdata = rwdata.splitlines()
     inputdata = tanvir_stemming.prepare_input(inputdata)
@@ -62,8 +58,7 @@ def testModel():
         indxrw = indxrw + 1
 
 model = joblib.load('contextIdentifierBangla.pkl')
+df = pd.read_csv("word_weights.csv")
+distinctwords = df['word']
 
-#save mode for later use
-#joblib.dump(model, 'contextIdentifierBangla.pkl')
-testModel()
 #print("Hello model")
