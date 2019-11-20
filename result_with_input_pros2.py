@@ -7,6 +7,10 @@ import summarizer
 
 
 def getresult(inputdata):
+    model = joblib.load('contextIdentifierBangla.pkl')
+    df = pd.read_csv("word_weights.csv")
+    distinctwords = df['word']
+
     rwdata = inputdata
     rwdata = rwdata.splitlines()
     inputdata = tanvir_stemming.prepare_input(inputdata)
@@ -14,7 +18,9 @@ def getresult(inputdata):
     #print(inputdata)
     testdata = []
     #constructing list of feature vector from input data
+    resultes = []
     for i in inputdata:
+        result = {}
         pg = [0] * 4 #making list of size 4, contins 0 in each cell
         k = 0
         #feature vector for a paragraph
@@ -32,33 +38,23 @@ def getresult(inputdata):
     indxrw = 0
     for i in res:
         if i == 100:
-            print("politics")
-            print("অনুচ্ছেদ")
-            print(rwdata[indxrw])
-            print("সারাংশ")
-            print(summarizer.summary('politics', rwdata[indxrw]))
+            result["paragraph"] = rwdata[indxrw]
+            result["category"] = "politics"
+            result["summary"] = summarizer.summary('politics', rwdata[indxrw])
         elif i == 200:
-            print("religious")
-            print("অনুচ্ছেদ")
-            print(rwdata[indxrw])
-            print("সারাংশ")
-            print(summarizer.summary('religious', rwdata[indxrw]))
+            result["paragraph"] = rwdata[indxrw]
+            result["category"] = "religious"
+            result["summary"] = summarizer.summary('politics', rwdata[indxrw])
         elif i == 300:
-            print("sports")
-            print("অনুচ্ছেদ")
-            print(rwdata[indxrw])
-            print("সারাংশ")
-            print(summarizer.summary('sports', rwdata[indxrw]))
+            result["paragraph"] = rwdata[indxrw]
+            result["category"] = "sports"
+            result["summary"] = summarizer.summary('politics', rwdata[indxrw])
         else:
-            print("entertainment")
-            print("অনুচ্ছেদ")
-            print(rwdata[indxrw])
-            print("সারাংশ")
-            print(summarizer.summary('entertainment', rwdata[indxrw]))
+            result["paragraph"] = rwdata[indxrw]
+            result["category"] = "entertainment"
+            result["summary"] = summarizer.summary('politics', rwdata[indxrw])
+        resultes.append(result)
         indxrw = indxrw + 1
 
-model = joblib.load('contextIdentifierBangla.pkl')
-df = pd.read_csv("word_weights.csv")
-distinctwords = df['word']
+    return {"results": resultes}
 
-#print("Hello model")
