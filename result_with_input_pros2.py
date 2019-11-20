@@ -18,9 +18,7 @@ def getresult(inputdata):
     #print(inputdata)
     testdata = []
     #constructing list of feature vector from input data
-    resultes = []
     for i in inputdata:
-        result = {}
         pg = [0] * 4 #making list of size 4, contins 0 in each cell
         k = 0
         #feature vector for a paragraph
@@ -36,7 +34,9 @@ def getresult(inputdata):
     #predict and print result 
     res = model.predict(testdata)
     indxrw = 0
+    resultes = []  # added for store result dict
     for i in res:
+        result = {}
         if i == 100:
             result["paragraph"] = rwdata[indxrw]
             result["category"] = "politics"
@@ -54,7 +54,8 @@ def getresult(inputdata):
             result["category"] = "entertainment"
             result["summary"] = summarizer.summary('politics', rwdata[indxrw])
         resultes.append(result)
+        #print(result)
         indxrw = indxrw + 1
-
+    #print(resultes)
     return {"results": resultes}
 

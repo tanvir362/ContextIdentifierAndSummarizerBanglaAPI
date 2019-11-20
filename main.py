@@ -10,9 +10,9 @@ app = Flask(__name__)
 @app.route('/<inp>')
 def index(inp):
     #print(inp)
-    #f = codecs.open("input.txt", "r", "utf8")
-    #inp = f.read()
-
+    f = codecs.open("input.txt", "r", "utf8")
+    inp = f.read()
+    #print(inp)
     res = mdl.getresult(inp)
     #print(res)
     jsondata = json.dumps(res, ensure_ascii=False)
