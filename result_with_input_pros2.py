@@ -1,15 +1,14 @@
 import codecs
 
 import pandas as pd
-from sklearn import metrics
-from sklearn import svm
 import joblib
-from sklearn.model_selection import train_test_split
 import tanvir_stemming
 import summarizer
 
 
 def testModel():
+    df = pd.read_csv("word_weights.csv")
+    distinctwords = df['word']
     f = codecs.open("input.txt", "r", "utf8")
     inputdata = f.read()
     rwdata = inputdata
@@ -61,105 +60,9 @@ def testModel():
             print(summarizer.summary('entertainment', rwdata[indxrw]))
         indxrw = indxrw + 1
 
+model = joblib.load('contextIdentifierBangla.pkl')
 
-df = pd.read_csv("train_data/word_weights.csv")
-distinctwords = df['word']
-
-f = codecs.open("train_data/politics.txt", "r", "utf8")
-politicsdata = f.read()
-#print(politicsdata)
-    
-f = codecs.open("train_data/religious.txt", "r", "utf8")
-religiousdata = f.read()
-
-f = codecs.open("train_data/sports.txt", "r", "utf8")
-sportsdata = f.read()
-
-f = codecs.open("train_data/entertainment.txt", "r", "utf8")
-entertaindata = f.read()
-
-politicsdata = politicsdata.splitlines()
-religiousdata = religiousdata.splitlines()
-sportsdata = sportsdata.splitlines()
-entertaindata = entertaindata.splitlines()
-
-traindata = []
-trainlevel = []
-for i in politicsdata:
-    paragraph = [0] * 4 #making list of size 4, contins 0 in each cell
-    k = 0
-    #feature vector for a paragraph
-    for j in distinctwords:
-        if j in i:
-            cnt = i.count(j)
-            paragraph[0] = paragraph[0] + cnt*df.at[k, 'politics']
-            paragraph[1] = paragraph[1] + cnt*df.at[k, 'religious']
-            paragraph[2] = paragraph[2] + cnt*df.at[k, 'sports']
-            paragraph[3] = paragraph[3] + cnt*df.at[k, 'entertainment']
-        k = k+1
-    trainlevel.append(100)
-    traindata.append(paragraph)
-
-for i in religiousdata:
-    paragraph = [0] * 4 #making list of size 4, contins 0 in each cell
-    k = 0
-    #feature vector for a paragraph
-    for j in distinctwords:
-        if j in i:
-            cnt = i.count(j)
-            paragraph[0] = paragraph[0] + cnt*df.at[k, 'politics']
-            paragraph[1] = paragraph[1] + cnt*df.at[k, 'religious']
-            paragraph[2] = paragraph[2] + cnt*df.at[k, 'sports']
-            paragraph[3] = paragraph[3] + cnt*df.at[k, 'entertainment']
-        k = k+1
-    trainlevel.append(200)
-    traindata.append(paragraph)
-    
-for i in sportsdata:
-    paragraph = [0] * 4 #making list of size 4, contins 0 in each cell
-    k = 0
-    #feature vector for a paragraph
-    for j in distinctwords:
-        if j in i:
-            cnt = i.count(j)
-            paragraph[0] = paragraph[0] + cnt*df.at[k, 'politics']
-            paragraph[1] = paragraph[1] + cnt*df.at[k, 'religious']
-            paragraph[2] = paragraph[2] + cnt*df.at[k, 'sports']
-            paragraph[3] = paragraph[3] + cnt*df.at[k, 'entertainment']
-        k = k+1
-    trainlevel.append(300)
-    traindata.append(paragraph)
-
-for i in entertaindata:
-    paragraph = [0] * 4 #making list of size 4, contins 0 in each cell
-    k = 0
-    #feature vector for a paragraph
-    for j in distinctwords:
-        if j in i:
-            cnt = i.count(j)
-            paragraph[0] = paragraph[0] + cnt*df.at[k, 'politics']
-            paragraph[1] = paragraph[1] + cnt*df.at[k, 'religious']
-            paragraph[2] = paragraph[2] + cnt*df.at[k, 'sports']
-            paragraph[3] = paragraph[3] + cnt*df.at[k, 'entertainment']
-        k = k+1
-    trainlevel.append(400)
-    traindata.append(paragraph)
-    
-X_train, X_test, y_train, y_test = train_test_split(traindata, trainlevel, test_size=0.4, random_state=109)
-    
-model = svm.SVC(kernel='linear')
-model.fit(X_train, y_train)
-
-y_pred = model.predict(X_test)
-#print(X_test)
-#print(y_pred)
-print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
-print("Precision:", metrics.precision_score(y_test, y_pred, labels=[100], average=None))
-print("Recall:", metrics.recall_score(y_test, y_pred, labels=[100], average=None))
 #save mode for later use
-joblib.dump(model, 'contextIdentifierBangla.pkl')
+#joblib.dump(model, 'contextIdentifierBangla.pkl')
 testModel()
 #print("Hello model")
-
-
-#print(model.predict([traindata[40]]))
