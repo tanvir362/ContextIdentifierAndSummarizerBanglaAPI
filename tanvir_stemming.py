@@ -53,7 +53,7 @@ def steam_writer(paragraphs="tanvir", filename="mysteams.txt"):
     f.write(line)
 
 
-#input uncleaned read data return list of list of stem of every line
+#input uncleaned read data return list of string containing only stem
 def prepare_input(inputs="tanvir"):
     inputs = inputs.splitlines()
     lines = []

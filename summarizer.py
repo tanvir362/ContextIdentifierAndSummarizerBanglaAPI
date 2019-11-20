@@ -23,7 +23,7 @@ def sentence_stems_mapping(text="Tanvir ahmed"):
 
 #input: sentence stems mapping output: sentence score dictionary
 def sentence_scoring(type, mdict):
-    df = pd.read_csv("train_data/word_weights.csv")
+    df = pd.read_csv("word_weights.csv")
     distinctwords = df['word']
     indx = 0
     indx_score = {}

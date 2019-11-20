@@ -15,6 +15,7 @@ def testModel():
     rwdata = rwdata.splitlines()
     inputdata = tanvir_stemming.prepare_input(inputdata)
     #print(inputdata)
+    #print(inputdata)
     testdata = []
     #constructing list of feature vector from input data
     for i in inputdata:
